@@ -1,0 +1,47 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+)
+
+func main() {
+	// URL of the dataset you want to download from data.gov
+	url := "https://data.wa.gov/api/views/f6w7-q2d2/rows.csv?accessType=DOWNLOAD"
+
+	// File path where you want to save the downloaded dataset
+	filePath := "C:/Users/madhu/OneDrive/Desktop/Go_Project/dataset.csv"
+
+	// Create the output file
+	outputFile, err := os.Create(filePath)
+	if err != nil {
+		fmt.Printf("Failed to create file: %v\n", err)
+		return
+	}
+	defer outputFile.Close()
+
+	// Make a GET request to the dataset URL
+	response, err := http.Get(url)
+	if err != nil {
+		fmt.Printf("Failed to make request: %v\n", err)
+		return
+	}
+	defer response.Body.Close()
+
+	// Check the status code of the response
+	if response.StatusCode != http.StatusOK {
+		fmt.Printf("Unexpected status code: %d\n", response.StatusCode)
+		return
+	}
+
+	// Copy the response body to the output file
+	_, err = io.Copy(outputFile, response.Body)
+	if err != nil {
+		fmt.Printf("Failed to copy data to file: %v\n", err)
+		return
+	}
+
+	fmt.Println("Dataset downloaded successfully!")
+}
