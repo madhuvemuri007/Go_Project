@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submission</title>
+</head>
+<body>
+
+<h2>Enter Vehicle Information</h2>
+<form action="http://localhost:8080/submit" method="post">
+
+    <label for="vin">VIN:</label>
+    <input type="text" id="vin" name="vin" required><br>
+
+    <label for="county">County:</label>
+    <input type="text" id="county" name="county" required><br>
+
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city" required><br>
+
+    <label for="state">State:</label>
+    <input type="text" id="state" name="state" required><br>
+
+    <label for="postal_code">Postal Code:</label>
+    <input type="text" id="postal_code" name="postal_code" required><br>
+
+    <label for="model_year">Model Year:</label>
+    <input type="text" id="model_year" name="model_year" required><br>
+
+    <label for="make">Make:</label>
+    <input type="text" id="make" name="make" required><br>
+
+    <label for="model">Model:</label>
+    <input type="text" id="model" name="model" required><br>
+
+    <label for="ev_type">Electric Vehicle Type:</label>
+    <input type="text" id="ev_type" name="ev_type" required><br>
+
+    <label for="cafve">CAFV Eligibility:</label>
+    <input type="text" id="cafve" name="cafve" required><br>
+
+    <label for="electric_range">Electric Range:</label>
+    <input type="text" id="electric_range" name="electric_range" required><br>
+
+    <label for="base_msrp">Base MSRP:</label>
+    <input type="text" id="base_msrp" name="base_msrp" required><br>
+
+    <label for="legislative_district">Legislative District:</label>
+    <input type="text" id="legislative_district" name="legislative_district" required><br>
+
+    <label for="dol_vehicle_id">DOL Vehicle ID:</label>
+    <input type="text" id="dol_vehicle_id" name="dol_vehicle_id" required><br>
+
+    <label for="vehicle_location">Vehicle Location:</label>
+    <input type="text" id="vehicle_location" name="vehicle_location" required><br>
+
+    <label for="electric_utility">Electric Utility:</label>
+    <input type="text" id="electric_utility" name="electric_utility" required><br>
+
+    <label for="census_tract">Census Tract 2020:</label>
+    <input type="text" id="census_tract" name="census_tract" required><br>
+
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>
