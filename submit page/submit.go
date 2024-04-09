@@ -9,6 +9,17 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+var db *sql.DB
+
+func init() {
+	// Initialize the database connection
+	var err error
+	db, err = sql.Open("mysql", "root:root@tcp(localhost:3306)/electricvehicle_dataset")
+	if err != nil {
+		log.Fatal("Error connecting to database:", err)
+	}
+}
+
 func main() {
 	http.HandleFunc("/submit", submitHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -22,13 +33,19 @@ func submitHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Connect to MySQL database
-	db, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/electricvehicle_dataset")
+	// Check if record with same VIN already exists
+	var count int
+	err = db.QueryRow("SELECT COUNT(*) FROM Vehicle WHERE VIN = ?", r.FormValue("vin")).Scan(&count)
 	if err != nil {
-		http.Error(w, "Error connecting to database", http.StatusInternalServerError)
+		log.Println("Error checking record existence:", err)
+		http.Error(w, "Error checking record existence", http.StatusInternalServerError)
 		return
 	}
-	defer db.Close()
+
+	if count > 0 {
+		http.Error(w, "Record with the same VIN already exists", http.StatusConflict)
+		return
+	}
 
 	// Insert data into database
 	stmt, err := db.Prepare("INSERT INTO Vehicle (VIN, County, City, State, Postal_Code, Model_Year, Make, Model, Electric_Vehicle_Type, CAFV_Eligibility, Electric_Range, Base_MSRP, Legislative_District, DOL_Vehicle_ID, Vehicle_Location, Electric_Utility, Census_Tract_2020) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
@@ -59,7 +76,7 @@ func submitHandler(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if err != nil {
-		fmt.Println("Error executing query:", err.Error()) // Print detailed error message
+		log.Println("Error executing query:", err) // Log detailed error message
 		http.Error(w, "Error executing query", http.StatusInternalServerError)
 		return
 	}
